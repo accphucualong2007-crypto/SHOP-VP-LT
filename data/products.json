@@ -1,0 +1,46 @@
+[
+  {
+    "id": "SP001",
+    "name": "Võ phục Karate trắng",
+    "price": 250000,
+    "category": "Karate",
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "description": "Võ phục Karate màu trắng, phù hợp tập luyện và thi đấu.",
+    "image": "/uploads/karate.svg",
+    "active": true
+  },
+  {
+    "id": "SP002",
+    "name": "Võ phục Taekwondo",
+    "price": 280000,
+    "category": "Taekwondo",
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "description": "Võ phục Taekwondo thoải mái, chắc chắn.",
+    "image": "/uploads/taekwondo.svg",
+    "active": true
+  },
+  {
+    "id": "SP003",
+    "name": "Đai võ thuật",
+    "price": 70000,
+    "category": "Phụ kiện",
+    "sizes": [
+      "S",
+      "M",
+      "L"
+    ],
+    "description": "Đai võ thuật nhiều màu.",
+    "image": "/uploads/belt.svg",
+    "active": true
+  }
+]

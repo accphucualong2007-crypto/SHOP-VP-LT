@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Tra cứu đơn - SHOP VÕ PHỤC LT</title><link rel="stylesheet" href="/style.css"></head>
+<body><header><div class="wrap nav"><a class="logo" href="/">SHOP VÕ PHỤC LT</a><a href="/">← Về cửa hàng</a></div></header>
+<main class="wrap track-page"><div class="panel track-box"><h1>Tra cứu đơn hàng</h1>
+<p>Nhập <b>mã đơn hàng</b> và <b>số điện thoại</b> đã dùng khi đặt hàng.</p>
+<form id="trackForm"><label>Mã đơn hàng<input name="orderId" placeholder="Ví dụ: DH..." required></label>
+<label>Số điện thoại<input name="phone" placeholder="038..." required></label>
+<button class="btn full">Tra cứu</button></form><div id="trackResult"></div></div></main>
+<script>
+const money=n=>new Intl.NumberFormat("vi-VN").format(Number(n)||0)+"đ";
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+document.getElementById("trackForm").addEventListener("submit",async e=>{
+ e.preventDefault(); const f=Object.fromEntries(new FormData(e.target)); const box=document.getElementById("trackResult");
+ box.innerHTML='<p>Đang tra cứu...</p>';
+ try{
+  const r=await fetch("/api/orders/"+encodeURIComponent(f.orderId.trim())+"?phone="+encodeURIComponent(f.phone.trim()));
+  const d=await r.json(); if(!r.ok) throw new Error(d.error||"Không tìm thấy đơn.");
+  const o=d.order;
+  box.innerHTML='<div class="success"><h2>Đơn '+esc(o.id)+'</h2>'+
+   '<div class="status">'+esc(o.status)+'</div>'+
+   '<p><b>Ngày đặt:</b> '+new Date(o.createdAt).toLocaleString("vi-VN")+'</p>'+
+   '<p><b>Khách hàng:</b> '+esc(o.customer.name)+'<br><b>Số điện thoại:</b> '+esc(o.customer.phone)+'<br><b>Địa chỉ:</b> '+esc(o.customer.address)+'</p>'+
+   '<h3>Sản phẩm</h3><ul>'+o.items.map(i=>'<li>'+esc(i.name)+' — Size '+esc(i.size)+' — '+i.quantity+' × '+money(i.price)+'</li>').join("")+'</ul>'+
+   '<h2>Tổng: '+money(o.total)+'</h2>'+
+   '<p><b>Thanh toán:</b> '+esc(o.paymentMethod)+'<br><b>Trạng thái thanh toán:</b> '+esc(o.paymentStatus)+'</p>'+
+   (o.paymentMethod==="VietQR"&&o.qrUrl?'<img class="qr" src="'+esc(o.qrUrl)+'"><p>Quét QR nếu chưa thanh toán.</p>':"")+
+   '</div>';
+ }catch(err){box.innerHTML='<p class="error">'+esc(err.message)+'</p>'}
+});
+</script></body></html>
